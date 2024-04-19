@@ -79,6 +79,7 @@ ${DAEMON_NAME} init $VALIDATOR_KEY_NAME --chain-id=$CHAIN_ID
 ${DAEMON_NAME} keys list
 
 wget ${GENESIS} -O ${DAEMON_HOME}/config/genesis.json
+wget "https://raw.githubusercontent.com/111STAVR111/props/main/Warden/addrbook.json" -O ${DAEMON_HOME}/config/addrbook.json 
 
 sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "0.0025"'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
 sed -i \
