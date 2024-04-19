@@ -143,7 +143,7 @@ EOF
 chmod +x create_validator.sh
 tee claim_faucet.sh > /dev/null <<EOF
 #!/bin/bash
-curl -XPOST -d '{"address": "\$(${DAEMON_NAME} comet show-address)"}' https://faucet.buenavista.wardenprotocol.org
+curl -XPOST -d '{"address": "\$(${DAEMON_NAME} keys show $VALIDATOR_KEY_NAME -a)"}' https://faucet.buenavista.wardenprotocol.org
 EOF
 chmod +x claim_faucet.sh
 tee unjail_validator.sh > /dev/null <<EOF
