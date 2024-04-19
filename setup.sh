@@ -165,7 +165,7 @@ sudo systemctl restart ${DAEMON_NAME}
 EOF
 chmod +x start_${DAEMON_NAME}.sh
 tee check_log.sh > /dev/null <<EOF
-journalctl -u ${DAEMON_NAME} -f
+sudo journalctl -u ${DAEMON_NAME} -f
 EOF
 chmod +x check_log.sh
 
