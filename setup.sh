@@ -53,7 +53,7 @@ wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.3.0/
 unzip wardend_Linux_x86_64.zip
 rm -rf wardend_Linux_x86_64.zip
 mv ${DAEMON_NAME} ${INSTALLATION_DIR}/bin
-${DAEMON_NAME} version
+
 # Copy binary to cosmovisor
 cp ${INSTALLATION_DIR}/bin/${DAEMON_NAME} ${DAEMON_HOME}/cosmovisor/genesis/bin/
 sudo ln -s ${DAEMON_HOME}/cosmovisor/genesis ${DAEMON_HOME}/cosmovisor/current -f
@@ -65,6 +65,7 @@ if [ -z "$VALIDATOR_KEY_NAME" ]; then
     exit 1
 fi
 
+${DAEMON_NAME} version
 ${DAEMON_NAME} config keyring-backend file
 read -p "Do you want to recover wallet? [y/N]: " RECOVER
 RECOVER=$(echo "$RECOVER" | tr '[:upper:]' '[:lower:]')
