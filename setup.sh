@@ -7,7 +7,7 @@ CHAIN_ID='buenavista-1'
 DENOM='uward'
 GENESIS="https://raw.githubusercontent.com/warden-protocol/networks/main/testnets/buenavista/genesis.json"
 SEEDS=""
-PEERS="ddb4d92ab6eba8363bab2f3a0d7fa7a970ae437f@sentry-1.buenavista.wardenprotocol.org:26656,c717995fd56dcf0056ed835e489788af4ffd8fe8@sentry-2.buenavista.wardenprotocol.org:26656,e1c61de5d437f35a715ac94b88ec62c482edc166@sentry-3.buenavista.wardenprotocol.org:26656,b14f35c07c1b2e58c4a1c1727c89a5933739eeea@warden-testnet-peer.itrocket.net:18656,00c0b45d650def885fcbcc0f86ca515eceede537@testnet-warden.konsortech.xyz:15656,61446070887838944c455cb713a7770b41f35ac5@37.60.249.101:26656,0be8cf6de2a01a6dc7adb29a801722fe4d061455@65.109.115.100:27060,8288657cb2ba075f600911685670517d18f54f3b@65.108.231.124:18656,dc0122e37c203dec43306430a1f1879650653479@37.27.97.16:26656,6fb5cf2179ca9dd98ababd1c8d29878b2021c5c3@146.19.24.175:26856"
+PEERS="895efd33011b12c75d75e83382329cc510fb0464@warden-testnet-peer.cryptonode.id:24656,ddb4d92ab6eba8363bab2f3a0d7fa7a970ae437f@sentry-1.buenavista.wardenprotocol.org:26656,c717995fd56dcf0056ed835e489788af4ffd8fe8@sentry-2.buenavista.wardenprotocol.org:26656,e1c61de5d437f35a715ac94b88ec62c482edc166@sentry-3.buenavista.wardenprotocol.org:26656,b14f35c07c1b2e58c4a1c1727c89a5933739eeea@warden-testnet-peer.itrocket.net:18656,00c0b45d650def885fcbcc0f86ca515eceede537@testnet-warden.konsortech.xyz:15656,61446070887838944c455cb713a7770b41f35ac5@37.60.249.101:26656,0be8cf6de2a01a6dc7adb29a801722fe4d061455@65.109.115.100:27060,8288657cb2ba075f600911685670517d18f54f3b@65.108.231.124:18656,dc0122e37c203dec43306430a1f1879650653479@37.27.97.16:26656,6fb5cf2179ca9dd98ababd1c8d29878b2021c5c3@146.19.24.175:26856"
 GOPATH=$HOME/go
 
 # Pre-requisites
@@ -66,7 +66,6 @@ if [ -z "$VALIDATOR_KEY_NAME" ]; then
 fi
 
 ${DAEMON_NAME} version
-${DAEMON_NAME} config keyring-backend file
 read -p "Do you want to recover wallet? [y/N]: " RECOVER
 RECOVER=$(echo "$RECOVER" | tr '[:upper:]' '[:lower:]')
 if [[ "$RECOVER" == "y" || "$RECOVER" == "yes" ]]; then
@@ -74,14 +73,13 @@ if [[ "$RECOVER" == "y" || "$RECOVER" == "yes" ]]; then
 else
     ${DAEMON_NAME} keys add $VALIDATOR_KEY_NAME
 fi
-${DAEMON_NAME} config chain-id $CHAIN_ID
 ${DAEMON_NAME} init $VALIDATOR_KEY_NAME --chain-id=$CHAIN_ID
 ${DAEMON_NAME} keys list
 
 wget ${GENESIS} -O ${DAEMON_HOME}/config/genesis.json
 wget "https://raw.githubusercontent.com/111STAVR111/props/main/Warden/addrbook.json" -O ${DAEMON_HOME}/config/addrbook.json 
 
-sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "0.0025"'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
+sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "0.0025'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
 sed -i \
   -e 's|^pruning *=.*|pruning = "custom"|' \
   -e 's|^pruning-keep-recent *=.*|pruning-keep-recent = "100"|' \
@@ -110,14 +108,14 @@ if [[ "$use_custom_port" =~ ^[Yy](es)?$ ]]; then
     while [[ "$port_prefix" =~ [^0-9] || ${#port_prefix} -gt 2 || $port_prefix -gt 50 ]]; do
         read -p "Invalid input, enter port number prefix (max 2 digits, not exceeding 50): " port_prefix
     done
-    ${DAEMON_NAME} config node tcp://localhost:${port_prefix}657
+    sed -i.bak -e "s%:26656%:${port_prefix}656%g;" ${DAEMON_HOME}/config/client.toml
     sed -i.bak -e "s%:1317%:${port_prefix}317%g; s%:8080%:${port_prefix}080%g; s%:9090%:${port_prefix}090%g; s%:9091%:${port_prefix}091%g; s%:8545%:${port_prefix}545%g; s%:8546%:${port_prefix}546%g; s%:6065%:${port_prefix}065%g" ${DAEMON_HOME}/config/app.toml
     sed -i.bak -e "s%:26658%:${port_prefix}658%g; s%:26657%:${port_prefix}657%g; s%:6060%:${port_prefix}060%g; s%:26656%:${port_prefix}656%g; s%:26660%:${port_prefix}660%g" ${DAEMON_HOME}/config/config.toml
 fi
 
 sed -i.bak \
-        -e "/^.*seeds =/ s/=.*/= \"$SEEDS\"/" \
-        -e "s/^.*persistent_peers *=.*/persistent_peers = \"$PEERS\"/" \
+        -e "/^[[:space:]]*seeds =/ s/=.*/= \"$SEEDS\"/" \
+        -e "s/^[[:space:]]*persistent_peers *=.*/persistent_peers = \"$PEERS\"/" \
         ${DAEMON_HOME}/config/config.toml
 
 tee validator.json > /dev/null <<EOF
