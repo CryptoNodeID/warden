@@ -135,9 +135,9 @@ tee validator.json > /dev/null <<EOF
 EOF
 tee create_validator.sh > /dev/null <<EOF
 #!/bin/bash
-${DAEMON_NAME} tx staking create-validator validator.json \
+${DAEMON_NAME} tx staking create-validator ./validator.json \
     --from=${VALIDATOR_KEY_NAME} \
-    --chain-id=alfama \
+    --chain-id=${CHAIN_ID} \
     --fees=500${DENOM}
 EOF
 chmod +x create_validator.sh
