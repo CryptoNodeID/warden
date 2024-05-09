@@ -75,6 +75,9 @@ else
 fi
 ${DAEMON_NAME} init $VALIDATOR_KEY_NAME --chain-id=$CHAIN_ID
 ${DAEMON_NAME} keys list
+if ! grep -q 'export WALLET='${VALIDATOR_KEY_NAME} ~/.profile; then
+    echo "export WALLET=${VALIDATOR_KEY_NAME}" >> ~/.profile
+fi
 
 wget ${GENESIS} -O ${DAEMON_HOME}/config/genesis.json
 wget "https://raw.githubusercontent.com/111STAVR111/props/main/Warden/addrbook.json" -O ${DAEMON_HOME}/config/addrbook.json 
@@ -120,7 +123,7 @@ sed -i.bak \
 
 tee validator.json > /dev/null <<EOF
 { \
-    "pubkey": $(${DAEMON_NAME} comet show-validator), \
+    "pubkey": \$(${DAEMON_NAME} comet show-validator), \
     "amount": "1000000${DENOM}", \
     "moniker": "$VALIDATOR_KEY_NAME", \
     "identity": "$INPUT_IDENTITY", \
