@@ -122,18 +122,18 @@ sed -i.bak \
         ${DAEMON_HOME}/config/config.toml
 
 tee validator.json > /dev/null <<EOF
-{ \
-    "pubkey": \$(${DAEMON_NAME} comet show-validator), \
-    "amount": "1000000${DENOM}", \
-    "moniker": "$VALIDATOR_KEY_NAME", \
-    "identity": "$INPUT_IDENTITY", \
-    "website": "$INPUT_WEBSITE", \
-    "security": "$INPUT_EMAIL", \
-    "details": "$INPUT_DETAILS", \
-    "commission-rate": "0.1", \
-    "commission-max-rate": "0.2", \
-    "commission-max-change-rate": "0.01", \
-    "min-self-delegation": "1" \
+{
+    "pubkey": $(${DAEMON_NAME} comet show-validator),
+    "amount": "1000000${DENOM}",
+    "moniker": "$VALIDATOR_KEY_NAME",
+    "identity": "$INPUT_IDENTITY",
+    "website": "$INPUT_WEBSITE",
+    "security": "$INPUT_EMAIL",
+    "details": "$INPUT_DETAILS",
+    "commission-rate": "0.1",
+    "commission-max-rate": "0.2",
+    "commission-max-change-rate": "0.01",
+    "min-self-delegation": "1"
 }
 EOF
 tee create_validator.sh > /dev/null <<EOF
@@ -153,7 +153,8 @@ tee unjail_validator.sh > /dev/null <<EOF
 #!/bin/bash
 ${DAEMON_NAME} tx slashing unjail \
  --from=$VALIDATOR_KEY_NAME \
- --chain-id="$CHAIN_ID"
+ --chain-id="$CHAIN_ID" \
+ --fees=500${DENOM}
 EOF
 chmod +x unjail_validator.sh
 tee check_validator.sh > /dev/null <<EOF
