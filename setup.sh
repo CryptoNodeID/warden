@@ -5,9 +5,9 @@ DAEMON_HOME=$HOME/.warden
 INSTALLATION_DIR=$(dirname "$(realpath "$0")")
 CHAIN_ID='buenavista-1'
 DENOM='uward'
-GENESIS="https://raw.githubusercontent.com/warden-protocol/networks/main/testnets/buenavista/genesis.json"
+GENESIS="https://snapshot.cryptonode.id/warden-testnet/genesis.json"
 SEEDS=""
-PEERS="895efd33011b12c75d75e83382329cc510fb0464@warden-testnet-peer.cryptonode.id:24656,ddb4d92ab6eba8363bab2f3a0d7fa7a970ae437f@sentry-1.buenavista.wardenprotocol.org:26656,c717995fd56dcf0056ed835e489788af4ffd8fe8@sentry-2.buenavista.wardenprotocol.org:26656,e1c61de5d437f35a715ac94b88ec62c482edc166@sentry-3.buenavista.wardenprotocol.org:26656,b14f35c07c1b2e58c4a1c1727c89a5933739eeea@warden-testnet-peer.itrocket.net:18656,00c0b45d650def885fcbcc0f86ca515eceede537@testnet-warden.konsortech.xyz:15656,61446070887838944c455cb713a7770b41f35ac5@37.60.249.101:26656,0be8cf6de2a01a6dc7adb29a801722fe4d061455@65.109.115.100:27060,8288657cb2ba075f600911685670517d18f54f3b@65.108.231.124:18656,dc0122e37c203dec43306430a1f1879650653479@37.27.97.16:26656,6fb5cf2179ca9dd98ababd1c8d29878b2021c5c3@146.19.24.175:26856"
+PEERS="85abfb1a10ef88d37277e7462830890ff2f7a1ac@sentry1.cryptonode.id:24656,400195374c9bde32385a4398719ba3f529066569@sentry2.cryptonode.id:24656,92ba004ac4bcd5afbd46bc494ec906579d1f5c1d@52.30.124.80:26656,ed5781ea586d802b580fdc3515d75026262f4b9d@54.171.21.98:26656"
 GOPATH=$HOME/go
 
 # Pre-requisites
@@ -49,7 +49,7 @@ if ! command -v cosmovisor &> /dev/null; then
 fi
 
 # Download and install Binary
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.3.0/wardend_Linux_x86_64.zip
+wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.3.2/wardend_Linux_x86_64.zip
 unzip wardend_Linux_x86_64.zip
 rm -rf wardend_Linux_x86_64.zip
 mv ${DAEMON_NAME} ${INSTALLATION_DIR}/bin
