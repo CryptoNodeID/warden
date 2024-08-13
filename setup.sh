@@ -41,11 +41,9 @@ mkdir -p ${INSTALLATION_DIR}/bin
 mkdir -p ${DAEMON_HOME}/cosmovisor/genesis/bin
 mkdir -p ${DAEMON_HOME}/cosmovisor/upgrades
 if ! command -v cosmovisor &> /dev/null; then
-    wget https://github.com/cosmos/cosmos-sdk/releases/download/cosmovisor%2Fv1.5.0/cosmovisor-v1.5.0-linux-amd64.tar.gz
-    tar -xvzf cosmovisor-v1.5.0-linux-amd64.tar.gz
-    rm cosmovisor-v1.5.0-linux-amd64.tar.gz
-    mv cosmovisor /usr/local/bin/cosmovisor
-    cp ${INSTALLATION_DIR}/bin/cosmovisor /usr/local/bin/cosmovisor -f
+    wget https://github.com/cosmos/cosmos-sdk/releases/download/cosmovisor%2Fv1.6.0/cosmovisor-v1.6.0-linux-amd64.tar.gz -O - | tar -xzf -
+    sudo mv -f cosmovisor /usr/local/bin/cosmovisor
+    sudo chmod +x /usr/local/bin/cosmovisor
 fi
 
 # Download and install Binary
