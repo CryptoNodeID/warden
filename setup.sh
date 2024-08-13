@@ -47,7 +47,7 @@ if ! command -v cosmovisor &> /dev/null; then
 fi
 
 # Download and install Binary
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.3.2/wardend_Linux_x86_64.zip
+wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.4.1/wardend_Linux_x86_64.zip
 unzip wardend_Linux_x86_64.zip
 rm -rf wardend_Linux_x86_64.zip
 mv ${DAEMON_NAME} ${INSTALLATION_DIR}/bin
