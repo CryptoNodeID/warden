@@ -1,12 +1,12 @@
 #!/bin/bash
-CHAIN_NAME=wardenprotocol
-DAEMON_NAME=wardend
-DAEMON_HOME=$HOME/.warden
+CHAIN_NAME=wardenprotocol-c
+DAEMON_NAME=wardend-c
+DAEMON_HOME=$HOME/.warden-c
 INSTALLATION_DIR=$(dirname "$(realpath "$0")")
-CHAIN_ID='buenavista-1'
-DENOM='uward'
-GENESIS="https://snapshot.cryptonode.id/warden-testnet/genesis.json"
-SEEDS=""
+CHAIN_ID='chiado_10010-1'
+DENOM='award'
+GENESIS="https://raw.githubusercontent.com/warden-protocol/networks/main/testnets/chiado/genesis.json"
+SEEDS="2d2c7af1c2d28408f437aef3d034087f40b85401@52.51.132.79:26656"
 PEERS="85abfb1a10ef88d37277e7462830890ff2f7a1ac@sentry1.cryptonode.id:24656,400195374c9bde32385a4398719ba3f529066569@sentry2.cryptonode.id:24656,92ba004ac4bcd5afbd46bc494ec906579d1f5c1d@52.30.124.80:26656,ed5781ea586d802b580fdc3515d75026262f4b9d@54.171.21.98:26656"
 GOPATH=$HOME/go
 
@@ -35,6 +35,12 @@ else
     echo "Go version 1.22.0 is already installed."
 fi
 sudo apt -qy install curl git jq lz4 build-essential unzip
+export MAKEDEB_RELEASE='makedeb'
+bash -c "$(wget -qO - 'https://shlink.makedeb.org/install')"
+git clone https://mpr.makedeb.org/just
+cd just
+makedeb -si
+cd ${INSTALLATION_DIR}
 rm -rf ${CHAIN_NAME}
 rm -rf ${DAEMON_HOME}
 mkdir -p ${INSTALLATION_DIR}/bin
@@ -47,9 +53,10 @@ if ! command -v cosmovisor &> /dev/null; then
 fi
 
 # Download and install Binary
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.4.1/wardend_Linux_x86_64.zip
+wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.5.2/wardend_Linux_x86_64.zip
 unzip wardend_Linux_x86_64.zip
 rm -rf wardend_Linux_x86_64.zip
+mv wardend ${DAEMON_NAME}
 mv ${DAEMON_NAME} ${INSTALLATION_DIR}/bin
 
 # Copy binary to cosmovisor
@@ -78,9 +85,8 @@ if ! grep -q 'export WALLET='${VALIDATOR_KEY_NAME} ~/.profile; then
 fi
 
 wget ${GENESIS} -O ${DAEMON_HOME}/config/genesis.json
-wget "https://raw.githubusercontent.com/111STAVR111/props/main/Warden/addrbook.json" -O ${DAEMON_HOME}/config/addrbook.json 
 
-sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "0.0025'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
+sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "250000000000000'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
 sed -i \
   -e 's|^pruning *=.*|pruning = "custom"|' \
   -e 's|^pruning-keep-recent *=.*|pruning-keep-recent = "100"|' \
