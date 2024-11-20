@@ -1,7 +1,7 @@
 #!/bin/bash
-CHAIN_NAME=wardenprotocol-c
-DAEMON_NAME=wardend-c
-DAEMON_HOME=$HOME/.warden-c
+CHAIN_NAME=wardenprotocol
+DAEMON_NAME=wardend
+DAEMON_HOME=$HOME/.warden
 INSTALLATION_DIR=$(dirname "$(realpath "$0")")
 CHAIN_ID='chiado_10010-1'
 DENOM='award'
@@ -24,15 +24,15 @@ if ! grep -q "export PATH=.*$GOPATH/bin" ~/.profile; then
     echo "export PATH=$PATH:$GOPATH/bin" >> ~/.profile
     source ~/.profile
 fi
-GO_VERSION=$(go version 2>/dev/null | grep -oP 'go1\.22\.0')
-if [ -z "$(echo "$GO_VERSION" | grep -E 'go1\.22\.0')" ]; then
-    echo "Go is not installed or not version 1.22.0. Installing Go 1.22.0..."
-    wget https://go.dev/dl/go1.22.0.linux-amd64.tar.gz
+GO_VERSION=$(go version 2>/dev/null | grep -oP 'go1\.23\.3')
+if [ -z "$(echo "$GO_VERSION" | grep -E 'go1\.23\.3')" ]; then
+    echo "Go is not installed or not version 1.22.0. Installing Go 1.23.3..."
+    wget https://go.dev/dl/go1.23.3.linux-amd64.tar.gz
     sudo rm -rf $(which go)
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.22.0.linux-amd64.tar.gz
-    rm go1.22.0.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+    rm go1.23.3.linux-amd64.tar.gz
 else
-    echo "Go version 1.22.0 is already installed."
+    echo "Go version 1.23.3 is already installed."
 fi
 sudo apt -qy install curl git jq lz4 build-essential unzip
 export MAKEDEB_RELEASE='makedeb'
@@ -53,7 +53,7 @@ if ! command -v cosmovisor &> /dev/null; then
 fi
 
 # Download and install Binary
-wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.5.2/wardend_Linux_x86_64.zip
+wget https://github.com/warden-protocol/wardenprotocol/releases/download/v0.5.4/wardend_Linux_x86_64.zip
 unzip wardend_Linux_x86_64.zip
 rm -rf wardend_Linux_x86_64.zip
 mv wardend ${DAEMON_NAME}
