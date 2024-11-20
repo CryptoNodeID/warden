@@ -86,7 +86,7 @@ fi
 
 wget ${GENESIS} -O ${DAEMON_HOME}/config/genesis.json
 
-sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "250000000000000'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
+sed -i 's/minimum-gas-prices *=.*/minimum-gas-prices = "2000'$DENOM'"/' ${DAEMON_HOME}/config/app.toml
 sed -i \
   -e 's|^pruning *=.*|pruning = "custom"|' \
   -e 's|^pruning-keep-recent *=.*|pruning-keep-recent = "100"|' \
