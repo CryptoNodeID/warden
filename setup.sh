@@ -34,12 +34,7 @@ if [ -z "$(echo "$GO_VERSION" | grep -E 'go1\.23\.3')" ]; then
 else
     echo "Go version 1.23.3 is already installed."
 fi
-sudo apt -qy install curl git jq lz4 build-essential unzip
-export MAKEDEB_RELEASE='makedeb'
-bash -c "$(wget -qO - 'https://shlink.makedeb.org/install')"
-git clone https://mpr.makedeb.org/just
-cd just
-makedeb -si
+
 cd ${INSTALLATION_DIR}
 rm -rf ${CHAIN_NAME}
 rm -rf ${DAEMON_HOME}
